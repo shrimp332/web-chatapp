@@ -1,3 +1,29 @@
 :root {
   font-family: sans-serif;
 }
+
+.chat {
+  margin: auto;
+  width: 80%;
+}
+
+.chat-input {
+  width: 100%;
+  display: inline;
+}
+
+.chat-box {
+  overflow-y: auto;
+  height: 500px;
+  margin: auto;
+  background-color: grey;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.chat-message {
+  display: block;
+  background: lightgrey;
+  height: 30px;
+  margin-top: 5px;
+}

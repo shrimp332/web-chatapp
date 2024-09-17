@@ -6,10 +6,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Untitled</title>
   <link href="./css/style.css" rel="stylesheet">
+  <script defer src="https://unpkg.com/htmx.org@2.0.2/dist/htmx.js"
+    integrity="sha384-yZq+5izaUBKcRgFbxgkRYwpHhHHCpp5nseXp0MEQ1A4MTWVMnqkmcuFez8x5qfxr"
+    crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <h1>Hello World</h1>
+  <div class="chat">
+    <div class="chat-box" id="chatbox">
+      <span class="chat-message">Message 1</span>
+      <span class="chat-message">Message 2</span>
+      <span class="chat-message">Message 3</span>
+      <span class="chat-message">Message 4</span>
+      <span class="chat-message">Message 5</span>
+      <span class="chat-message">Message 6</span>
+      <span class="chat-message">Message 7</span>
+      <span class="chat-message">Message 8</span>
+    </div>
+    <input hx-post="/message" hx-swap="outerHTML" class="chat-input" type="text" name="chatinput" value="">
+  </div>
 </body>
 
 </html>
