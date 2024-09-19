@@ -7,18 +7,29 @@ import (
 )
 
 func messageHandler(w http.ResponseWriter, r *http.Request) {
+	if input := r.FormValue("chatinput"); len(input) > 300 {
+		w.Write(
+			[]byte(
+				`<div hx-swap-oob="afterbegin:#chatbox"><span style="color:darkred" class="chat-message">Message was too long</span></div>
+				<input hx-post="/message" autofocus hx-swap="outerHTML" class="chat-input" type="text" name="chatinput" value="">`,
+			),
+		)
+		return
+	}
 	message, err := santizeInput(r.FormValue("chatinput"))
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
 
-	resp := fmt.Sprintf(`
-		<div class="chat-box" id="chatbox" hx-swap-oob="afterbegin:#chatbox"><span class="chat-message">%s</span></div>
-		<input hx-post="/message" autofocus hx-swap="outerHTML" class="chat-input" type="text" name="chatinput" value="">
-	`, message)
+	resp := fmt.Sprintf(
+		`<div hx-swap-oob="afterbegin:#chatbox"><span class="chat-message">%s</span></div>`,
+		message,
+	)
 
-	w.Write([]byte(resp))
+	newInput := `<input hx-post="/message" autofocus hx-swap="outerHTML" class="chat-input" type="text" name="chatinput" value="">`
+	w.Write([]byte(newInput))
+	Hub.Broadcast <- []byte(resp)
 }
 
 func santizeInput(s string) (string, error) {

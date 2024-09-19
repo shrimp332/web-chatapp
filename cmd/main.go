@@ -22,6 +22,6 @@ func main() {
 		Handler: stack(mux),
 	}
 
-	log.Printf("Serving on http://localhost%s", server.Addr)
+	log.Printf("INFO serving on http://localhost%s", server.Addr)
 	log.Fatal(server.ListenAndServe())
 }

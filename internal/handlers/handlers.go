@@ -9,6 +9,7 @@ func Load(mux *http.ServeMux) {
 	fs := noDirList(http.FileServer(http.Dir("static")))
 	mux.Handle("GET /", http.StripPrefix("/", fs))
 	mux.HandleFunc("POST /message", messageHandler)
+	mux.HandleFunc("GET /ws", wsHandler)
 }
 
 func noDirList(next http.Handler) http.Handler {
