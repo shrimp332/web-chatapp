@@ -34,7 +34,7 @@ func messageHandler(w http.ResponseWriter, r *http.Request) {
 	if input := r.FormValue("chatinput"); len(input) > 300 {
 		w.Write(
 			[]byte(
-				`<div hx-swap-oob="afterbegin:#chatbox"><span style="color:darkred" class="chat-message">Message was too long</span></div>
+				`<div hx-swap-oob="afterbegin:#chatbox"><span class="chat-message error">Message was too long</span></div>
 				<input hx-post="/message" autofocus hx-swap="outerHTML" class="chat-input" type="text" name="chatinput" value="">`,
 			),
 		)
@@ -42,6 +42,7 @@ func messageHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	message := santizeInput(r.FormValue("chatinput"))
+
 	resp := fmt.Sprintf(
 		`<div hx-swap-oob="afterbegin:#chatbox"><span class="chat-message">%s</span></div>`,
 		message,
