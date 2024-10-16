@@ -1,33 +1,21 @@
 package handlers
 
 import (
-	"fmt"
+	"bytes"
+	"html/template"
 	"log"
 	"net/http"
-	"regexp"
 )
 
-var (
-	subs map[string]string
-	reg  *regexp.Regexp
-)
+var messageTemplate *template.Template
 
 func init() {
-	// regex init
-	subs = map[string]string{
-		"&":  "&amp;",
-		"<":  "&lt;",
-		">":  "&gt;",
-		"\"": "&quot;",
-		"'":  "&#x27;",
-		"/":  "&#x2F;",
-	}
-	pattern := "/|&|<|>|\"|'"
-	regex, err := regexp.Compile(pattern)
+	var err error
+	messageTemplate, err = template.New("Message").
+		Parse(`<div hx-swap-oob="afterbegin:#chatbox"><span class="chat-message">{{.}}</span></div>`)
 	if err != nil {
 		log.Fatalln("FATAL", err)
 	}
-	reg = regex
 }
 
 func messageHandler(w http.ResponseWriter, r *http.Request) {
@@ -41,20 +29,13 @@ func messageHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	message := santizeInput(r.FormValue("chatinput"))
-
-	resp := fmt.Sprintf(
-		`<div hx-swap-oob="afterbegin:#chatbox"><span class="chat-message">%s</span></div>`,
-		message,
-	)
-
 	newInput := `<input hx-post="/message" autofocus hx-swap="outerHTML" class="chat-input" type="text" name="chatinput" value="">`
 	w.Write([]byte(newInput))
-	Hub.Broadcast <- []byte(resp)
-}
 
-func santizeInput(s string) string {
-	return reg.ReplaceAllStringFunc(s, func(match string) string {
-		return subs[match]
-	})
+	buf := &bytes.Buffer{}
+	err := messageTemplate.ExecuteTemplate(buf, "Message", r.FormValue("chatinput"))
+	if err != nil {
+		panic(err)
+	}
+	Hub.Broadcast <- buf.Bytes()
 }
