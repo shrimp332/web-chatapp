@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	ws "htmx-site/internal/websocket"
+	ws "github.com/shrimp332/web-chatapp/internal/websocket"
 )
 
 var Hub *ws.Hub

@@ -1,4 +1,4 @@
-module htmx-site
+module github.com/shrimp332/web-chatapp
 
 go 1.23.0
 

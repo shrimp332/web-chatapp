@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"htmx-site/internal/handlers"
-	"htmx-site/internal/middleware"
+	"github.com/shrimp332/web-chatapp/internal/handlers"
+	"github.com/shrimp332/web-chatapp/internal/middleware"
 )
 
 func main() {
