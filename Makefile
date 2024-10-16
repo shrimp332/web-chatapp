@@ -1,5 +1,6 @@
+BIN = main
+SRC = $(shell find . -name '*.go')
 OS=$(shell uname -s)
-
 
 all: build
 
@@ -13,13 +14,16 @@ endif
 		-build.bin "./main" \
 		-build.cmd "make build"
 
-build:
-	@go build -o main ./cmd/main.go
+
+build: $(BIN)
 
 run: build
 	@./main
 
 clean:
 	@rm main
+
+$(BIN): $(SRC)
+	@go build -o main ./cmd/main.go
 
 .PHONY: all build run test clean dev
